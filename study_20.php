@@ -45,6 +45,7 @@ class ATM {
     }
     /*swith文で*/
     private function select_menu(){
+
         echo "こんにちは,残高照会(1),引き出し(2),入金(3)から選択してください".PHP_EOL;
         $select = trim(fgets(STDIN));
         $checked_select = SelectMenu::check($select);
@@ -84,10 +85,13 @@ class ATM {
             return;
         }
 
-        $checked_withdraw = CheckWithDraw::acheck($withdraw_money);
-        if($checked_withdraw === false){
+        $check_withdraw = new CheckWithDraw();
+        $check_withdraw->set_balance($this->user["balance"]);
+
+        if($check_withdraw->check($withdraw_money) === false){
             return $this->withdraw_menu();
         }
+
         $this->user["balance"] -= $withdraw_money;
         echo $withdraw_money."円引き出します".PHP_EOL;
     }
@@ -126,11 +130,7 @@ class ATM {
     }
 
 
-
 }
-
-
-
 $atm = new ATM();
 $atm->main();
 
