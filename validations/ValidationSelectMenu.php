@@ -1,6 +1,8 @@
 <?php
-class SelectMenu{
-    static function check($select){
+class ValidationSelectMenu{
+    public $error_menu;
+    
+     function check($select){
 
         if($select === ATM::BALANCE){
             return true;

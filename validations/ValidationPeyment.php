@@ -1,5 +1,5 @@
 <?php
-class CheckPeyMent{
+class ValidationPeyment{
     static function check($peyment_money){
         if(!$peyment_money){
             echo "金額を入力してください".PHP_EOL;

@@ -1,11 +1,11 @@
 <?php
 require_once('user_class.php');
-require_once('/Users/masatosato/desktop/PHP/validations/check_again.php');
-require_once('/Users/masatosato/desktop/PHP/validations/check_id.php');
-require_once('/Users/masatosato/desktop/PHP/validations/check_withdraw.php');
-require_once('/Users/masatosato/desktop/PHP/validations/check_select_menu.php');
-require_once('/Users/masatosato/desktop/PHP/validations/check_peyment.php');
-require_once('/Users/masatosato/desktop/PHP/validations/check_again.php');
+require_once('/Users/masatosato/desktop/PHP/validations/ValidationAgain.php');
+require_once('/Users/masatosato/desktop/PHP/validations/ValidationId.php');
+require_once('/Users/masatosato/desktop/PHP/validations/ValidationWithDraw.php');
+require_once('/Users/masatosato/desktop/PHP/validations/ValidationSelectMenu.php');
+require_once('/Users/masatosato/desktop/PHP/validations/ValidationPeyment.php');
+
 class ATM {
 
     const BALANCE = "1";
@@ -22,7 +22,7 @@ class ATM {
     public function login(){
         echo "idを入力してください".PHP_EOL;
         $my_id = trim(fgets(STDIN));
-        $checked_user = CheckId::check($my_id);
+        $checked_user = ValidationId::check($my_id);
 
     if($checked_user === false){
         return $this->login();
@@ -48,7 +48,7 @@ class ATM {
 
         echo "こんにちは,残高照会(1),引き出し(2),入金(3)から選択してください".PHP_EOL;
         $select = trim(fgets(STDIN));
-        $checked_select = SelectMenu::check($select);
+        $checked_select = ValidationSelectMenu::check($select);
         if($checked_select === false){
             return $this->select_menu();
         }
@@ -80,12 +80,8 @@ class ATM {
 
         echo "いくら引き出しますか？".PHP_EOL;
         $withdraw_money = trim(fgets(STDIN));
-        if($withdraw_money > $this->user["balance"]){
-            echo "出金額が残高を超えているので出金できません".PHP_EOL;
-            return;
-        }
-
-        $check_withdraw = new CheckWithDraw();
+        /*バリデーションのインスタンスを生成*/
+        $check_withdraw = new ValidationWithDraw();
         $check_withdraw->set_balance($this->user["balance"]);
 
         if($check_withdraw->check($withdraw_money) === false){
@@ -100,7 +96,7 @@ class ATM {
     private function peyment_menu(){
         echo "入金額を入力してください".PHP_EOL;
         $peyment_money = trim(fgets(STDIN));
-        $checked_peyment = CheckPeyMent::check($peyment_money);
+        $checked_peyment = ValidationPeyment::check($peyment_money);
         if($checked_peyment === false){
             return $this->peyment_menu();
             /*else修正*/
@@ -113,7 +109,7 @@ class ATM {
     private function again(){
         echo "操作を続けますか？続けるなら０、終了するなら９を入力してください".PHP_EOL;
         $again_select = trim(fgets(STDIN));
-        $checked_again = CheckAgain::check($again_select);
+        $checked_again = ValidationAgain::check($again_select);
         if($checked_again === false){
             return $this->again();
         }
