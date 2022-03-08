@@ -1,7 +1,6 @@
 <?php
-class ValidationSelectMenu{
-    public $error_menu;
-    
+class ValidationSelectMenu extends BaseValidation{
+
      function check($select){
 
         if($select === ATM::BALANCE){

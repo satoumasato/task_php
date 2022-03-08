@@ -1,5 +1,5 @@
 <?php
-class ValidationAgain{
+class ValidationAgain extends BaseValidation{
     static function check($again_select){
         if(!is_numeric($again_select)){
             echo "数字で入力してください".PHP_EOL;

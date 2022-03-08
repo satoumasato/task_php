@@ -1,5 +1,6 @@
 <?php
 require_once('user_class.php');
+require_once('/Users/masatosato/desktop/PHP/validations/BaseValidation.php');
 require_once('/Users/masatosato/desktop/PHP/validations/ValidationAgain.php');
 require_once('/Users/masatosato/desktop/PHP/validations/ValidationId.php');
 require_once('/Users/masatosato/desktop/PHP/validations/ValidationWithDraw.php');
@@ -48,9 +49,11 @@ class ATM {
 
         echo "こんにちは,残高照会(1),引き出し(2),入金(3)から選択してください".PHP_EOL;
         $select = trim(fgets(STDIN));
-        $checked_select = ValidationSelectMenu::check($select);
-        if($checked_select === false){
+        $check_select = new ValidationSelectMenu();
+        if($check_select->check($select) === false){
+            echo $check_select->get_error_messages();
             return $this->select_menu();
+
         }
         switch($select){
             case self::BALANCE:
@@ -85,6 +88,7 @@ class ATM {
         $check_withdraw->set_balance($this->user["balance"]);
 
         if($check_withdraw->check($withdraw_money) === false){
+            echo $check_withdraw->get_error_messages();
             return $this->withdraw_menu();
         }
 
@@ -96,8 +100,9 @@ class ATM {
     private function peyment_menu(){
         echo "入金額を入力してください".PHP_EOL;
         $peyment_money = trim(fgets(STDIN));
-        $checked_peyment = ValidationPeyment::check($peyment_money);
-        if($checked_peyment === false){
+        $check_peyment = new ValidationPeyment();
+        if($check_peyment->check($peyment_money) === false){
+            echo $check_peyment->get_error_messages();
             return $this->peyment_menu();
             /*else修正*/
         }
@@ -109,15 +114,15 @@ class ATM {
     private function again(){
         echo "操作を続けますか？続けるなら０、終了するなら９を入力してください".PHP_EOL;
         $again_select = trim(fgets(STDIN));
-        $checked_again = ValidationAgain::check($again_select);
-        if($checked_again === false){
+        $check_again = new ValidationAgain();
+        if($check_again->check($again_select) === false){
+            echo $check_again->get_error_messages();
             return $this->again();
         }
-        if($checked_again === true){
-            if($again_select === self::AGAIN){
-                echo "操作を続けます".PHP_EOL;
-                return $this->main();
-            }
+        if($check_again->check($again_select) === true){
+            echo "操作を続けます".PHP_EOL;
+            return $this->main();
+        }
             if($again_select === self::NO_AGAIN){
                 echo "操作を終了します".PHP_EOL;
                 return;
@@ -126,7 +131,7 @@ class ATM {
     }
 
 
-}
+
 $atm = new ATM();
 $atm->main();
 

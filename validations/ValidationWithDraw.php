@@ -1,6 +1,7 @@
 <?php
 
-class ValidationWithDraw{
+class ValidationWithDraw extends BaseValidation{
+
     public $user_balance;
     public $eroor;
     function set_balance($balance){

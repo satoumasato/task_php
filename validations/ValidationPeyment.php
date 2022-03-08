@@ -1,6 +1,6 @@
 <?php
-class ValidationPeyment{
-    static function check($peyment_money){
+class ValidationPeyment extends BaseValidation{
+     function check($peyment_money){
         if(!$peyment_money){
             echo "金額を入力してください".PHP_EOL;
             return false;
